@@ -1,10 +1,13 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class AppH {
 
-
+    private static Logger logger = LogManager.getLogger(AppH.class);
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
 
@@ -13,7 +16,7 @@ public class AppH {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
-
+        logger.info("hello!");
 
         entityManager.getTransaction().commit();
         entityManager.close();
