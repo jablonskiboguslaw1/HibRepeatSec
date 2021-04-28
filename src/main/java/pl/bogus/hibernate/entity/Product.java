@@ -26,6 +26,16 @@ private ProductType productType;
 @OneToMany(mappedBy = "product",cascade = CascadeType.REMOVE)
 private List<Review> reviews;
 
+@OneToOne(fetch = FetchType.LAZY)
+private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     @Override
     public String toString() {
