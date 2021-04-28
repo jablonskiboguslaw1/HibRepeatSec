@@ -1,16 +1,17 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul1;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.bogus.hibernate.entity.Product;
 
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public class AppH04Delete {
+public class AppH03Update {
 
-    private static Logger logger = LogManager.getLogger(AppH04Delete.class);
+    private static Logger logger = LogManager.getLogger(AppH03Update.class);
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
 
@@ -19,9 +20,11 @@ public class AppH04Delete {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
 
-        Product product = entityManager.find(Product.class, 4L);
+        Product product = entityManager.find(Product.class, 1L);
 
-        entityManager.remove(product);
+        product.setName("ProductUpdated2");
+       // Product merged = entityManager.merge(product);
+        logger.info(product);
 
         entityManager.getTransaction().commit();
         entityManager.close();

@@ -3,6 +3,7 @@ package pl.bogus.hibernate.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -22,6 +23,11 @@ private BigDecimal price;
 @Column(name = "type")
 private ProductType productType;
 
+@OneToMany
+@JoinColumn(name = "product_id")
+private List<Review> reviews;
+
+
     @Override
     public String toString() {
         return "Product{" +
@@ -32,7 +38,16 @@ private ProductType productType;
                 ", updated=" + updated +
                 ", price=" + price +
                 ", productType=" + productType +
+                ", reviews=" + reviews +
                 '}';
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public Long getId() {
