@@ -5,14 +5,23 @@ import javax.persistence.*;
 @Entity
 public class Review {
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
-private String content;
-private int rating;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String content;
+    private int rating;
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Product product;
 
-@Column(name = "product_id")
-private Long productId;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
 
     @Override
     public String toString() {
@@ -20,17 +29,9 @@ private Long productId;
                 "id=" + id +
                 ", content='" + content + '\'' +
                 ", rating=" + rating +
-                ", productId=" + productId +
                 '}';
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
 
     public Long getId() {
         return id;

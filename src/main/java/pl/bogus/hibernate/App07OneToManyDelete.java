@@ -11,7 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.List;
 
-public class App05OneToManyBidirectional {
+public class App07OneToManyDelete {
     private static Logger logger = LogManager.getLogger();
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
@@ -20,10 +20,9 @@ public class App05OneToManyBidirectional {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
 
-        List<Review> reviews = entityManager.createQuery("select r from Review r").getResultList();
-        for (Review review : reviews) {
-            logger.info(review);
-        }
+        Product product = entityManager.find(Product.class, 2L);
+        logger.info(product);
+        entityManager.remove(product);
 
         entityManager.getTransaction().commit();
         entityManager.close();

@@ -23,8 +23,7 @@ private BigDecimal price;
 @Column(name = "type")
 private ProductType productType;
 
-@OneToMany
-@JoinColumn(name = "product_id")
+@OneToMany(mappedBy = "product",cascade = CascadeType.REMOVE)
 private List<Review> reviews;
 
 
@@ -38,7 +37,7 @@ private List<Review> reviews;
                 ", updated=" + updated +
                 ", price=" + price +
                 ", productType=" + productType +
-                ", reviews=" + reviews +
+
                 '}';
     }
 
