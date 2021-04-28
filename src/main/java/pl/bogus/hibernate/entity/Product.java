@@ -29,6 +29,21 @@ private List<Review> reviews;
 @OneToOne(fetch = FetchType.LAZY)
 private Category category;
 
+@ManyToMany
+@JoinTable(
+        joinColumns = {@JoinColumn(name = "product_id")},
+        inverseJoinColumns = {@JoinColumn(name = "attribute_id")}
+)
+private List<Attribute> attributes;
+
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<Attribute> attributes) {
+        this.attributes = attributes;
+    }
+
     public Category getCategory() {
         return category;
     }
