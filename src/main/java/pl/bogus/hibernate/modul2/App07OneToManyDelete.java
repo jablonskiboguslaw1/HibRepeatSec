@@ -1,17 +1,17 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul2;
 
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pl.bogus.hibernate.entity.Attribute;
 import pl.bogus.hibernate.entity.Product;
 import pl.bogus.hibernate.entity.Review;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.List;
 
-public class App13AddOneToMany {
+public class App07OneToManyDelete {
     private static Logger logger = LogManager.getLogger();
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
@@ -20,13 +20,9 @@ public class App13AddOneToMany {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
 
-        Product product = entityManager.find(Product.class, 5L);
-
-        Review review = new Review();
-        review.setContent("Review for prod no5");
-        review.setRating(5);
-        product.addReview(review);
-
+        Product product = entityManager.find(Product.class, 2L);
+        logger.info(product);
+        entityManager.remove(product);
 
         entityManager.getTransaction().commit();
         entityManager.close();

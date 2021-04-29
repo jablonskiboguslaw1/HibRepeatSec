@@ -1,16 +1,15 @@
 package pl.bogus.hibernate;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pl.bogus.hibernate.entity.Attribute;
-import pl.bogus.hibernate.entity.Product;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
+import java.util.List;
 
-public class App12AddManyToMany {
+public class App17JPQLAggrGroup {
     private static Logger logger = LogManager.getLogger();
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
@@ -18,15 +17,19 @@ public class App12AddManyToMany {
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        Attribute attribute = new Attribute();
-        attribute.setName("SIZE");
-        attribute.setValue("XS");
-        Product product = entityManager.find(Product.class, 4L);
-       product.addAttribute(attribute);
+        Query query = entityManager.createQuery(
+                "select p.category.id, Count(p) from Product p " +
+                        "group by p.category" );
+// query.setParameter("id", 6L);
+        List<Object[]> resultList = query.getResultList();
+        for (Object[] array : resultList) {
+            logger.info(array[0] +", "+ array[1]);
+        }
 
-       logger.info(attribute);
         entityManager.getTransaction().commit();
         entityManager.close();
 
     }
+
+
 }

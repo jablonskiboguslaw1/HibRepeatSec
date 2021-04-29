@@ -1,4 +1,4 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul2;
 
 
 import org.apache.logging.log4j.LogManager;

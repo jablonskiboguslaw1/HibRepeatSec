@@ -1,17 +1,13 @@
 package pl.bogus.hibernate;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pl.bogus.hibernate.entity.Category;
 import pl.bogus.hibernate.entity.Product;
-import pl.bogus.hibernate.entity.Review;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import java.util.List;
 
-public class App14DeleteOneToOne {
+public class App17JPQLAggr {
     private static Logger logger = LogManager.getLogger();
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
@@ -19,17 +15,20 @@ public class App14DeleteOneToOne {
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
+        Query query = entityManager.createQuery(
+                "select Count(p),AVG(p.price) from Product p" );
+// query.setParameter("id", 6L);
+        Object[] result = (Object[]) query.getSingleResult();
 
-        Product product = entityManager.find(Product.class, 3L);
-        Category category = product.getCategory();
-        if (category.getProduct().size()==1 )
-        {
-            entityManager.remove(category);
-            product.setCategory(null);
-        }
+
+        logger.info(result[0]);
+        logger.info(result[1]);
+
 
         entityManager.getTransaction().commit();
         entityManager.close();
 
     }
+
+
 }
