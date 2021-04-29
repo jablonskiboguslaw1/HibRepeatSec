@@ -57,4 +57,9 @@ private Set<Product> products = new HashSet<>();
                 ", products=" + products +
                 '}';
     }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.getAttributes().remove(this);
+    }
 }

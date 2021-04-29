@@ -3,6 +3,7 @@ package pl.bogus.hibernate.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,8 +26,8 @@ private BigDecimal price;
 @Column(name = "type")
 private ProductType productType;
 
-@OneToMany(mappedBy = "product",cascade = CascadeType.REMOVE)
-private List<Review> reviews;
+@OneToMany(mappedBy = "product",cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
+private List<Review> reviews = new ArrayList<>();
 
 @OneToOne(fetch = FetchType.LAZY)
 private Category category;
@@ -137,5 +138,10 @@ private Set<Attribute> attributes = new HashSet<>();
      attribute.getProducts().add(this);
 
 
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.setProduct(this);
     }
 }
