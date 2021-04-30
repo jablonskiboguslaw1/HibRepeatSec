@@ -27,7 +27,7 @@ private BigDecimal price;
 private ProductType productType;
 
 @OneToMany(mappedBy = "product",cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
-private List<Review> reviews = new ArrayList<>();
+private Set<Review> reviews = new HashSet<>();
 
 @OneToOne(fetch = FetchType.LAZY)
 private Category category;
@@ -69,11 +69,11 @@ private Set<Attribute> attributes = new HashSet<>();
                 '}';
     }
 
-    public List<Review> getReviews() {
+    public Set<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
+    public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
     }
 
