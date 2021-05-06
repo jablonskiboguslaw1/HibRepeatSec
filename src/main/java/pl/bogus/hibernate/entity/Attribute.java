@@ -54,7 +54,7 @@ private Set<Product> products = new HashSet<>();
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", value='" + value + '\'' +
-                ", products=" + products +
+               // ", products=" + products +
                 '}';
     }
 

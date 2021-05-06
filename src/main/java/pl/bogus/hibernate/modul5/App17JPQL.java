@@ -1,4 +1,4 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul5;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,10 +7,10 @@ import pl.bogus.hibernate.entity.Product;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class App22FetchType {
+public class App17JPQL {
     private static Logger logger = LogManager.getLogger();
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
@@ -18,17 +18,19 @@ public class App22FetchType {
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
+        TypedQuery<Product> productsQuery = entityManager.createQuery(
+                "select p from Product p where p.id =:id",
+                Product.class);
+        productsQuery.setParameter("id", 3L);
+        List<Product> products = productsQuery.getResultList();
 
-       /* Product product = entityManager.createQuery("select p from Product p where p.id=:id", Product.class)
-                .setParameter("id", 1L)
-                .getSingleResult();*/
+        //List<Product> products = entityManager.createQuery("select p from Product p").getResultList();
+        for (Product product : products) {
+            logger.info(product);
+        }
 
-        Product product = entityManager.find(Product.class, 1L);
 
 
-        logger.info(product);
-        logger.info(product.getCategory());
-        logger.info(product.getReviews());
 
         entityManager.getTransaction().commit();
         entityManager.close();

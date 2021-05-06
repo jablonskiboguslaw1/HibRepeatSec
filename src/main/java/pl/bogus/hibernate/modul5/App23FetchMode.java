@@ -1,15 +1,16 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul5;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pl.bogus.hibernate.entity.Order;
 import pl.bogus.hibernate.entity.Product;
-import pl.bogus.hibernate.entity.ProductInCategoryCounterDto;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class App18Join {
+public class App23FetchMode {
     private static Logger logger = LogManager.getLogger();
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
@@ -18,16 +19,15 @@ public class App18Join {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
 
-        TypedQuery<Product> query = entityManager.createQuery("Select p from Product p " +
-                "left join  fetch p.category c ",/*+
-                "where c.id =:id",*/ Product.class);
-        //query.setParameter("id", 2L);
-        List<Product> resultList = query.getResultList();
-        for (Product product : resultList) {
-            logger.info(product);
-            logger.info(product.getCategory());
+        List<Order> orders = entityManager.createQuery("select o from Order o", Order.class).getResultList();
+        for (Order order : orders) {
+            logger.info(order);
+            logger.info(order.getOrderRows());
+
         }
 
+
+        // Order order = entityManager.find(Order.class, 1L);
 
 
         entityManager.getTransaction().commit();

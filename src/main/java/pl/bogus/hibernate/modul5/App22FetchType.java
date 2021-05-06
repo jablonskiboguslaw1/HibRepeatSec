@@ -1,13 +1,16 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul5;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.bogus.hibernate.entity.Product;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.util.List;
 
-public class App17JPQLAggr {
+public class App22FetchType {
     private static Logger logger = LogManager.getLogger();
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
@@ -15,15 +18,17 @@ public class App17JPQLAggr {
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        Query query = entityManager.createQuery(
-                "select Count(p),AVG(p.price) from Product p" );
-// query.setParameter("id", 6L);
-        Object[] result = (Object[]) query.getSingleResult();
+
+       /* Product product = entityManager.createQuery("select p from Product p where p.id=:id", Product.class)
+                .setParameter("id", 1L)
+                .getSingleResult();*/
+
+        Product product = entityManager.find(Product.class, 1L);
 
 
-        logger.info(result[0]);
-        logger.info(result[1]);
-
+        logger.info(product);
+        logger.info(product.getCategory());
+        logger.info(product.getReviews());
 
         entityManager.getTransaction().commit();
         entityManager.close();

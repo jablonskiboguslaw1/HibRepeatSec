@@ -3,41 +3,46 @@ package pl.bogus.hibernate.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+@NamedEntityGraph(
+        name = "prod-rew-attr",
+        attributeNodes = {
+                @NamedAttributeNode("reviews"),
+                @NamedAttributeNode("attributes")
+        }
+)
 @Entity
 public class Product {
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
 
-private String name;
-private String description;
-private LocalDateTime created;
-private LocalDateTime updated;
-private BigDecimal price;
+    private String name;
+    private String description;
+    private LocalDateTime created;
+    private LocalDateTime updated;
+    private BigDecimal price;
 
-@Enumerated(EnumType.STRING)
-@Column(name = "type")
-private ProductType productType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private ProductType productType;
 
-@OneToMany(mappedBy = "product",cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
-private Set<Review> reviews = new HashSet<>();
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private Set<Review> reviews = new HashSet<>();
 
-@OneToOne(fetch = FetchType.LAZY)
-private Category category;
+    @OneToOne(fetch = FetchType.LAZY)
+    private Category category;
 
-@ManyToMany(cascade = CascadeType.PERSIST)
-@JoinTable(
-        joinColumns = {@JoinColumn(name = "product_id")},
-        inverseJoinColumns = {@JoinColumn(name = "attribute_id")}
-)
-private Set<Attribute> attributes = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            joinColumns = {@JoinColumn(name = "product_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attribute_id")}
+    )
+    private Set<Attribute> attributes = new HashSet<>();
 
     public Set<Attribute> getAttributes() {
         return attributes;
@@ -65,7 +70,8 @@ private Set<Attribute> attributes = new HashSet<>();
                 ", updated=" + updated +
                 ", price=" + price +
                 ", productType=" + productType +
-
+                ", reviews=" + reviews +
+                ", attributes=" + attributes +
                 '}';
     }
 
@@ -134,8 +140,8 @@ private Set<Attribute> attributes = new HashSet<>();
     }
 
     public void addAttribute(Attribute attribute) {
-     attributes.add(attribute);
-     attribute.getProducts().add(this);
+        attributes.add(attribute);
+        attribute.getProducts().add(this);
 
 
     }

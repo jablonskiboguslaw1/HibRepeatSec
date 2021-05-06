@@ -1,15 +1,13 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul5;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pl.bogus.hibernate.entity.Product;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
-public class App17JPQLAggrGroup {
+public class App17JPQLAggr {
     private static Logger logger = LogManager.getLogger();
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
@@ -18,13 +16,14 @@ public class App17JPQLAggrGroup {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         Query query = entityManager.createQuery(
-                "select p.category.id, Count(p) from Product p " +
-                        "group by p.category" );
+                "select Count(p),AVG(p.price) from Product p" );
 // query.setParameter("id", 6L);
-        List<Object[]> resultList = query.getResultList();
-        for (Object[] array : resultList) {
-            logger.info(array[0] +", "+ array[1]);
-        }
+        Object[] result = (Object[]) query.getSingleResult();
+
+
+        logger.info(result[0]);
+        logger.info(result[1]);
+
 
         entityManager.getTransaction().commit();
         entityManager.close();

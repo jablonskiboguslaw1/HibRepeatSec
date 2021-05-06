@@ -1,17 +1,16 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul5;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pl.bogus.hibernate.entity.ProductInCategoryCounterDto;
+import pl.bogus.hibernate.entity.Order;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class App17JPQLAutomaticResponseMapping {
+public class App24QueryWithIn {
     private static Logger logger = LogManager.getLogger();
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
@@ -19,18 +18,19 @@ public class App17JPQLAutomaticResponseMapping {
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        Query query = entityManager.createQuery(
-                "select new pl.bogus.hibernate.entity.ProductInCategoryCounterDto(p.category.id, Count(p)) from Product p " +
-                        "group by p.category" );
+
+        List<Order> orders = entityManager.createQuery("select o from Order o" +
+                " where id not in (:ids)", Order.class)
+                .setParameter("ids" , Arrays.asList(1L,3L,5L)).getResultList();
+        for (Order order : orders) {
+            logger.info(order);
 
 
-        List<ProductInCategoryCounterDto> resultList = query.getResultList();
-
-
-
-        for (ProductInCategoryCounterDto dto : resultList) {
-            logger.info(dto.getCategoryId()+ " "+ dto.getProductInCategoryCounter());
         }
+
+
+        // Order order = entityManager.find(Order.class, 1L);
+
 
         entityManager.getTransaction().commit();
         entityManager.close();

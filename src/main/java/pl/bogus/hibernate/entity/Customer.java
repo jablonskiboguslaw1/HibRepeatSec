@@ -15,8 +15,7 @@ public class Customer {
     private LocalDateTime created;
     private LocalDateTime updated;
 
-    @OneToMany
-    @JoinColumn(name = "customer_id")
+    @OneToMany(mappedBy = "customer")
     private Set<Order> orders = new HashSet<>();
 
     public Set<Order> getOrders() {
@@ -66,6 +65,8 @@ public class Customer {
     public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
     }
+
+
 
     @Override
     public String toString() {
