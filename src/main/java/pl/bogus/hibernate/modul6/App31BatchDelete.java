@@ -1,11 +1,13 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul6;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pl.bogus.hibernate.entity.batch.BatchReview;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.List;
 
 
 public class App31BatchDelete {
@@ -20,11 +22,17 @@ public class App31BatchDelete {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
 
-        int updated = entityManager.createQuery("update Review r SET rating = :rating where " +
-                "r.product.id = :id")
-                .setParameter("rating" ,11)
-                .setParameter("id" , 1L).executeUpdate();
-logger.info("updated "+ updated + " objects");
+        List<BatchReview> batchReviews = entityManager.createQuery(
+                "select r from BatchReview r " +
+                        "where r.productId=:id",
+                BatchReview.class
+        )
+                .setParameter("id", 1L)
+                .getResultList();
+
+        for (BatchReview batchReview : batchReviews) {
+            entityManager.remove(batchReview);
+        }
         entityManager.getTransaction().commit();
         entityManager.close();
     }
