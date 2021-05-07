@@ -1,4 +1,4 @@
-package pl.bogus.hibernate;
+package pl.bogus.hibernate.modul7;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,19 +33,23 @@ public class App33CriteriaJoin {
         Join<Object, Object> orders = (Join) customerRoot.fetch("orders", JoinType.INNER);
         orders.fetch("orderRows").fetch("product");
         ParameterExpression<Long> id = criteriaBuilder.parameter(Long.class);
+        ParameterExpression<Long> id2 = criteriaBuilder.parameter(Long.class);
         ParameterExpression<BigDecimal> total = criteriaBuilder.parameter(BigDecimal.class);
         criteriaQuery.select(customerRoot)
                 .distinct(true)
                 .where(
                         criteriaBuilder.and(
+                                criteriaBuilder.or(
                                 criteriaBuilder.equal(customerRoot.get("id"), id),
+                                criteriaBuilder.equal(customerRoot.get("id"), id2)),
                                 criteriaBuilder.greaterThan(orders.get("total"), total)
                         ));
 
 
         TypedQuery<Customer> query = entityManager.createQuery(criteriaQuery);
         query.setParameter(id, 1L);
-        query.setParameter(total, new BigDecimal("50.00"));
+        query.setParameter(id2, 2L);
+        query.setParameter(total, new BigDecimal("20.00"));
 
 
         List<Customer> resultList = query.getResultList();
@@ -57,6 +61,7 @@ public class App33CriteriaJoin {
                 logger.info(order);
                 for (OrderRow orderRow : order.getOrderRows()) {
                     logger.info(orderRow);
+                    logger.info(orderRow.getProduct());
                 }
             }
         }
